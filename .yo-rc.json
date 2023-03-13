@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "exam-maker",
+    "libraryId": "77cc05ae-5dae-4cc0-80d5-783ba6493486",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "ExamMaker",
+    "solutionShortDescription": "ExamMaker description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

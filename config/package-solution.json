@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "exam-maker-client-side-solution",
+    "id": "77cc05ae-5dae-4cc0-80d5-783ba6493486",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "ExamMaker description"
+      },
+      "longDescription": {
+        "default": "ExamMaker description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "exam-maker Feature",
+        "description": "The feature that activates elements of the exam-maker solution.",
+        "id": "ff7b5e2d-901c-487a-9a3c-05597406ee1e",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/exam-maker.sppkg"
+  }
+}
