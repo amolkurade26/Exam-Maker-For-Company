@@ -72,20 +72,20 @@ export default function Summary(props: IAssessmentProps) {
 
   return (
     <div>
-      <DefaultButton
+      {/* <DefaultButton
         secondaryText="Opens the Sample Modal"
         onClick={showModal}
-        text="Open Modal"
-      />
-      <Modal
+        text="Before start Exam Read the Rules"
+      /> */}
+      {/* <Modal
         titleAriaId={titleId}
         isOpen={isModalOpen}
         onDismiss={hideModal}
         isModeless={true}
         containerClassName={contentStyles.container}
         dragOptions={isDraggable ? dragOptions : undefined}
-      >
-        <div className={contentStyles.header}>
+      > }
+        { <div className={contentStyles.header}>
           <h2 className={contentStyles.heading} id={titleId}>
             Summary Details
           </h2>
@@ -95,7 +95,7 @@ export default function Summary(props: IAssessmentProps) {
             ariaLabel="Close popup modal"
             onClick={hideModal}
           />
-        </div>
+        </div> */}
 
         <div className={contentStyles.body}>
           <p>Test should be completed within 30 minutes</p>
@@ -106,7 +106,7 @@ export default function Summary(props: IAssessmentProps) {
             }}
           />
         </div>
-      </Modal>
+      {/* </Modal> */}
     </div>
   );
 }

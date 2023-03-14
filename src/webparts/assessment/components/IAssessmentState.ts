@@ -11,4 +11,5 @@ export interface IAssessmentState {
   checkTimeOut: boolean;
   questionSummaryData: boolean;
   summaryInfo: boolean;
+  checkExamPreviewActive: boolean;
 }
