@@ -4,7 +4,7 @@ import { IAssessmentProps } from "./IAssessmentProps";
 import { IAssessmentState } from "./IAssessmentState";
 import { escape } from "@microsoft/sp-lodash-subset";
 import DataService from "../../../service/DataService";
-import { checkExamPreview } from "./CheckExamPreview";
+import { CheckExamPreview } from "./CheckExamPreview";
 
 import {
   COLUMNS_Answers,
@@ -61,7 +61,7 @@ export default class Assessment extends React.Component<
       checkBoxSelected: "",
       TextBox: "",
       time: {},
-      seconds: 300,
+      seconds: 99999,
       checkTimeOut: false,
       questionSummaryData: false,
       summaryInfo: false,
@@ -109,9 +109,7 @@ export default class Assessment extends React.Component<
     }
   }
 
-  public async componentDidMount() {
-    
-  }
+  public async componentDidMount() {}
 
   private setAnswer(index: number, value: string) {
     let questionList = this.state.questionList;
@@ -214,9 +212,9 @@ export default class Assessment extends React.Component<
       });
   }
 
-  private checkExamPreview(){
+  private checkExamPreview() {
     alert("checkExamPreview");
-
+    this.setState({ checkExamPreviewActive: true });
   }
 
   private PreviousClick(activeQuestionIndex: any) {
@@ -255,12 +253,17 @@ export default class Assessment extends React.Component<
 
   private handleCallback = (isSummaryInfo: boolean) => {
     this.setState({ summaryInfo: isSummaryInfo });
-    if(isSummaryInfo){
+    if (isSummaryInfo) {
       this.examStart();
     }
   };
 
-  private examStart(){
+  private handleCallbackQuestionNo = (QuestionNo: any) => {
+    console.log("QuestionNo", QuestionNo);
+    this.saveUserAnswers(QuestionNo - 1);
+  };
+
+  private examStart() {
     let timeLeftVar = this.secondsToTime(this.state.seconds);
     this.setState({ time: timeLeftVar });
     this.startTimer();
@@ -290,9 +293,8 @@ export default class Assessment extends React.Component<
       });
   }
 
-
-  private hideQuestionsPreview(){
-    this.setState({questionSummaryData: false})
+  private hideQuestionsPreview() {
+    this.setState({ questionSummaryData: false });
   }
 
   public render(): React.ReactElement<IAssessmentProps> {
@@ -335,7 +337,6 @@ export default class Assessment extends React.Component<
                     }
                   </Stack.Item>
                 </Stack>
-
                 <Stack tokens={tokens.sectionStack}>
                   {questionList.length > 0 && (
                     <>
@@ -354,7 +355,11 @@ export default class Assessment extends React.Component<
                         {questionList[activeQuestionIndexNo].QuestionType ===
                           QuestionType.TEXTBOX && (
                           <TextField
-                            value={questionList[activeQuestionIndexNo].Answer != ""? this.state.TextBox : ""}
+                            value={
+                              questionList[activeQuestionIndexNo].Answer != ""
+                                ? this.state.TextBox
+                                : ""
+                            }
                             onChange={(ev) => {
                               this.setTextBoxAnswer(activeQuestionIndexNo, ev);
                             }}
@@ -400,7 +405,7 @@ export default class Assessment extends React.Component<
                                     ) &&
                                     questionList[
                                       activeQuestionIndexNo
-                                    ].Answer.indexOf(opt) != -1
+                                    ].Answer.indexOf(opt) !== -1
                                       ? true
                                       : false
                                   }
@@ -412,7 +417,7 @@ export default class Assessment extends React.Component<
                       <Stack horizontal>
                         <Stack.Item align="start">
                           {activeQuestionIndexNo >= 1 &&
-                            this.state.checkTimeOut == false && (
+                            this.state.checkTimeOut === false && (
                               <PrimaryButton
                                 text="Previous"
                                 onClick={() => {
@@ -423,7 +428,7 @@ export default class Assessment extends React.Component<
                         </Stack.Item>
                         <Stack.Item style={{ padding: "0 0 0 50%" }}>
                           {activeQuestionIndexNo < questionList.length - 1 &&
-                            this.state.checkTimeOut == false && (
+                            this.state.checkTimeOut === false && (
                               <PrimaryButton
                                 text="Next"
                                 onClick={() =>
@@ -435,7 +440,6 @@ export default class Assessment extends React.Component<
                             )}
                         </Stack.Item>
                       </Stack>
-
                       <Stack horizontal>
                         <Stack.Item align="start">
                           {activeQuestionIndexNo == questionList.length - 1 && (
@@ -456,19 +460,26 @@ export default class Assessment extends React.Component<
                       </Stack>
 
                       {this.state.questionSummaryData == true && (
-                        <><QuestionSummary
+                        <>
+                          <QuestionSummary
+                            CallbackQuestionNo={this.handleCallbackQuestionNo}
                             userData={this.state.questionList}
                           ></QuestionSummary>
                           <Stack horizontal>
                             <Stack.Item>
-                            <PrimaryButton
-                              text="Hide Questions Preview"
-                              onClick={() => this.hideQuestionsPreview()} />
+                              <PrimaryButton
+                                text="Hide Questions Preview"
+                                onClick={() => this.hideQuestionsPreview()}
+                              />
                             </Stack.Item>
-                          </Stack>                          
+                          </Stack>
                         </>
                       )}
-                     
+
+                      {/* <>
+                      <CheckExamPreview userData={this.state.questionList}></CheckExamPreview>
+                      
+                      </> */}
                     </>
                   )}
                 </Stack>

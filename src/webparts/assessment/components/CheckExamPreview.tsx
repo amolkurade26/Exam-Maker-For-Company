@@ -2,7 +2,7 @@ import * as React from "react";
 import { IQuestionSummaryProps } from "./IQuestionSummaryProps";
 import { Checkbox, IStackTokens, Stack } from "office-ui-fabric-react";
 
-export const checkExamPreview = (props: IQuestionSummaryProps) => {
+export const CheckExamPreview = (props: IQuestionSummaryProps) => {
   let data = props.userData;
   return (
     <>

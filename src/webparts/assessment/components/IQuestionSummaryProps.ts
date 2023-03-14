@@ -1,3 +1,5 @@
 export interface IQuestionSummaryProps {
-  userData: any;
+  userData?: any;
+  
+  CallbackQuestionNo?: any;
 }
