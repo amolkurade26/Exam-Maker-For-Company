@@ -17,16 +17,29 @@ export const QuestionSummary = (props: IQuestionSummaryProps) => {
   let data = props.userData;
   const stackinternalTokens: IStackTokens = { childrenGap: 5 };
 
-  function getSelectedQuestion(ID: any)  {
-    props.CallbackQuestionNo(ID)
+  function getSelectedQuestion(ID: any) {
+    props.CallbackQuestionNo(ID);
   }
 
   return (
     <>
       <h4>Questions Preview</h4>
+      {/* <Stack>
+        <Stack horizontal>
+          <Stack.Item>
+            <Checkbox label="Attempt Questions" defaultChecked />
+            <Checkbox label="Not Attempt Questions" />
+          </Stack.Item>
+        </Stack>
+      </Stack> */}
       <Stack
         styles={{
-          root: { background: "#e9ecef", paddingBottom: 5, paddingLeft: 5, width:`30%` },
+          root: {
+            background: "#e9ecef",
+            paddingBottom: 5,
+            paddingLeft: 5,
+            width: `30%`,
+          },
         }}
       >
         <Stack horizontal wrap tokens={stackinternalTokens}>
