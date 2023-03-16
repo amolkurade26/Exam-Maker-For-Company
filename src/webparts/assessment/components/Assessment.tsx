@@ -61,7 +61,7 @@ export default class Assessment extends React.Component<
       checkBoxSelected: "",
       TextBox: "",
       time: {},
-      seconds: 99999,
+      seconds: 9999999,
       checkTimeOut: false,
       questionSummaryData: false,
       summaryInfo: false,
@@ -180,6 +180,7 @@ export default class Assessment extends React.Component<
           this.setState({
             activeQuestionIndexNo: activeQuestionIndex,
             radioSelected: this.state.questionList[activeQuestionIndex].Answer,
+            questionSummaryData: false,
           });
         });
     } catch (error) {
@@ -213,7 +214,6 @@ export default class Assessment extends React.Component<
   }
 
   private checkExamPreview() {
-    alert("checkExamPreview");
     this.setState({ checkExamPreviewActive: true });
   }
 
@@ -259,7 +259,7 @@ export default class Assessment extends React.Component<
   };
 
   private handleCallbackQuestionNo = (QuestionNo: any) => {
-    console.log("QuestionNo", QuestionNo);
+    // console.log("QuestionNo", QuestionNo);
     this.saveUserAnswers(QuestionNo - 1);
   };
 
@@ -293,9 +293,9 @@ export default class Assessment extends React.Component<
       });
   }
 
-  private hideQuestionsPreview() {
-    this.setState({ questionSummaryData: false });
-  }
+  // private hideQuestionsPreview() {
+  //   this.setState({ questionSummaryData: false });
+  // }
 
   public render(): React.ReactElement<IAssessmentProps> {
     this._ops = this.props.context.serviceScope.consume(DataService.serviceKey);
@@ -327,162 +327,187 @@ export default class Assessment extends React.Component<
                     ? "0" + this.state.time.s
                     : this.state.time.s}
                 </h2>
-                <Stack horizontal>
-                  <Stack.Item>
-                    {
-                      <PrimaryButton
-                        text="QuestionSummery"
-                        onClick={() => this.checkQuestionSummery()}
-                      />
-                    }
-                  </Stack.Item>
-                </Stack>
-                <Stack tokens={tokens.sectionStack}>
-                  {questionList.length > 0 && (
-                    <>
-                      <Stack.Item>
-                        <Text variant={"large"} block>
-                          {" "}
-                          #{activeQuestionIndexNo + 1}{" "}
-                        </Text>
-                      </Stack.Item>
-                      <Stack.Item>
-                        <Text>
-                          {questionList[activeQuestionIndexNo].Question}
-                        </Text>
-                      </Stack.Item>
-                      <Stack.Item>
-                        {questionList[activeQuestionIndexNo].QuestionType ===
-                          QuestionType.TEXTBOX && (
-                          <TextField
-                            value={
-                              questionList[activeQuestionIndexNo].Answer != ""
-                                ? this.state.TextBox
-                                : ""
-                            }
-                            onChange={(ev) => {
-                              this.setTextBoxAnswer(activeQuestionIndexNo, ev);
-                            }}
-                            multiline
+                {this.state.checkExamPreviewActive == false ? (
+                  <>
+                    <Stack horizontal>
+                      <Stack.Item align="end">
+                        {
+                          <PrimaryButton
+                            text="QuestionSummery"
+                            onClick={() => this.checkQuestionSummery()}
                           />
-                        )}
-                        {questionList[activeQuestionIndexNo].QuestionType ===
-                          QuestionType.RADIOBUTTON && (
-                          <ChoiceGroup
-                            options={options}
-                            onChange={(ev, option) => {
-                              this.setAnswer(
-                                activeQuestionIndexNo,
-                                option.text
-                              );
-                            }}
-                            selectedKey={
-                              questionList[activeQuestionIndexNo].Answer != ""
-                                ? radioSelected
-                                : false
-                            }
-                          />
-                        )}
-                        {questionList[activeQuestionIndexNo].QuestionType ===
-                          QuestionType.CHECKBOX &&
-                          questionList[activeQuestionIndexNo].Options.split(
-                            ";"
-                          ).map(
-                            (opt: string, index: number, array: string[]) => {
-                              return (
-                                <Checkbox
-                                  label={opt}
-                                  onChange={(ev, checked) => {
-                                    this.setCheckboxAnswer(
-                                      activeQuestionIndexNo,
-                                      opt,
-                                      checked
-                                    );
-                                  }}
-                                  checked={
-                                    Array.isArray(
-                                      questionList[activeQuestionIndexNo].Answer
-                                    ) &&
-                                    questionList[
-                                      activeQuestionIndexNo
-                                    ].Answer.indexOf(opt) !== -1
-                                      ? true
-                                      : false
-                                  }
-                                />
-                              );
-                            }
-                          )}
+                        }
                       </Stack.Item>
-                      <Stack horizontal>
-                        <Stack.Item align="start">
-                          {activeQuestionIndexNo >= 1 &&
-                            this.state.checkTimeOut === false && (
-                              <PrimaryButton
-                                text="Previous"
-                                onClick={() => {
-                                  this.PreviousClick(activeQuestionIndexNo - 1);
+                    </Stack>
+                    <Stack tokens={tokens.sectionStack}>
+                      {questionList.length > 0 && (
+                        <>
+                          <Stack.Item>
+                            <Text variant={"large"} block>
+                              {" "}
+                              #{activeQuestionIndexNo + 1}{" "}
+                            </Text>
+                          </Stack.Item>
+                          <Stack.Item>
+                            <Text>
+                              {questionList[activeQuestionIndexNo].Question}
+                            </Text>
+                          </Stack.Item>
+                          <Stack.Item>
+                            {questionList[activeQuestionIndexNo]
+                              .QuestionType === QuestionType.TEXTBOX && (
+                              <TextField
+                                value={
+                                  questionList[activeQuestionIndexNo].Answer !=
+                                  ""
+                                    ? this.state.TextBox
+                                    : ""
+                                }
+                                onChange={(ev) => {
+                                  this.setTextBoxAnswer(
+                                    activeQuestionIndexNo,
+                                    ev
+                                  );
                                 }}
+                                multiline
                               />
                             )}
-                        </Stack.Item>
-                        <Stack.Item style={{ padding: "0 0 0 50%" }}>
-                          {activeQuestionIndexNo < questionList.length - 1 &&
-                            this.state.checkTimeOut === false && (
-                              <PrimaryButton
-                                text="Next"
-                                onClick={() =>
-                                  this.saveUserAnswers(
-                                    activeQuestionIndexNo + 1
-                                  )
+                            {questionList[activeQuestionIndexNo]
+                              .QuestionType === QuestionType.RADIOBUTTON && (
+                              <ChoiceGroup
+                                options={options}
+                                onChange={(ev, option) => {
+                                  this.setAnswer(
+                                    activeQuestionIndexNo,
+                                    option.text
+                                  );
+                                }}
+                                selectedKey={
+                                  questionList[activeQuestionIndexNo].Answer !=
+                                  ""
+                                    ? radioSelected
+                                    : false
                                 }
                               />
                             )}
-                        </Stack.Item>
-                      </Stack>
-                      <Stack horizontal>
-                        <Stack.Item align="start">
-                          {activeQuestionIndexNo == questionList.length - 1 && (
-                            <PrimaryButton
-                              text="Exam Preview"
-                              onClick={() => this.checkExamPreview()}
-                            />
-                          )}
-                        </Stack.Item>
-                        <Stack.Item style={{ padding: "0 0 0 50%" }}>
-                          {activeQuestionIndexNo == questionList.length - 1 && (
-                            <PrimaryButton
-                              text="Submit"
-                              onClick={() => this.checkScore()}
-                            />
-                          )}
-                        </Stack.Item>
-                      </Stack>
-
-                      {this.state.questionSummaryData == true && (
-                        <>
-                          <QuestionSummary
-                            CallbackQuestionNo={this.handleCallbackQuestionNo}
-                            userData={this.state.questionList}
-                          ></QuestionSummary>
+                            {questionList[activeQuestionIndexNo]
+                              .QuestionType === QuestionType.CHECKBOX &&
+                              questionList[activeQuestionIndexNo].Options.split(
+                                ";"
+                              ).map(
+                                (
+                                  opt: string,
+                                  index: number,
+                                  array: string[]
+                                ) => {
+                                  return (
+                                    <Checkbox
+                                      label={opt}
+                                      onChange={(ev, checked) => {
+                                        this.setCheckboxAnswer(
+                                          activeQuestionIndexNo,
+                                          opt,
+                                          checked
+                                        );
+                                      }}
+                                      checked={
+                                        Array.isArray(
+                                          questionList[activeQuestionIndexNo]
+                                            .Answer
+                                        ) &&
+                                        questionList[
+                                          activeQuestionIndexNo
+                                        ].Answer.indexOf(opt) !== -1
+                                          ? true
+                                          : false
+                                      }
+                                    />
+                                  );
+                                }
+                              )}
+                          </Stack.Item>
                           <Stack horizontal>
-                            <Stack.Item>
-                              <PrimaryButton
-                                text="Hide Questions Preview"
-                                onClick={() => this.hideQuestionsPreview()}
-                              />
+                            <Stack.Item align="start">
+                              {activeQuestionIndexNo >= 1 &&
+                                this.state.checkTimeOut === false && (
+                                  <PrimaryButton
+                                    text="Previous"
+                                    onClick={() => {
+                                      this.PreviousClick(
+                                        activeQuestionIndexNo - 1
+                                      );
+                                    }}
+                                  />
+                                )}
+                            </Stack.Item>
+                            <Stack.Item style={{ padding: "0 0 0 50%" }}>
+                              {activeQuestionIndexNo <
+                                questionList.length - 1 &&
+                                this.state.checkTimeOut === false && (
+                                  <PrimaryButton
+                                    text="Next"
+                                    onClick={() =>
+                                      this.saveUserAnswers(
+                                        activeQuestionIndexNo + 1
+                                      )
+                                    }
+                                  />
+                                )}
                             </Stack.Item>
                           </Stack>
+                          <Stack horizontal>
+                            <Stack.Item align="start">
+                              {activeQuestionIndexNo ==
+                                questionList.length - 1 && (
+                                <PrimaryButton
+                                  text="Exam Preview"
+                                  onClick={() => this.checkExamPreview()}
+                                />
+                              )}
+                            </Stack.Item>
+                            <Stack.Item style={{ padding: "0 0 0 50%" }}>
+                              {activeQuestionIndexNo ==
+                                questionList.length - 1 && (
+                                <PrimaryButton
+                                  text="Submit"
+                                  onClick={() => this.checkScore()}
+                                />
+                              )}
+                            </Stack.Item>
+                          </Stack>
+
+                          {this.state.questionSummaryData == true && (
+                            <>
+                              <QuestionSummary
+                                CallbackQuestionNo={
+                                  this.handleCallbackQuestionNo
+                                }
+                                userData={this.state.questionList}
+                              ></QuestionSummary>
+                              {/* <Stack horizontal>
+                      <Stack.Item>
+                        <PrimaryButton
+                          text="Hide Questions Preview"
+                          onClick={() => this.hideQuestionsPreview()}
+                        />
+                      </Stack.Item>
+                    </Stack> */}
+                            </>
+                          )}
+                          {/* <>
+            {this.state.checkExamPreviewActive === true}{
+              <CheckExamPreview
+                userData={this.state.questionList}
+              ></CheckExamPreview>
+            }
+            </> */}
                         </>
                       )}
-
-                      {/* <>
-                      <CheckExamPreview userData={this.state.questionList}></CheckExamPreview>
-                      
-                      </> */}
-                    </>
-                  )}
-                </Stack>
+                    </Stack>
+                  </>
+                ) : (
+                  <CheckExamPreview userData={this.state.questionList} />
+                )}
               </section>
             ) : (
               <ThankYou />

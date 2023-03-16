@@ -18,7 +18,6 @@ export const QuestionSummary = (props: IQuestionSummaryProps) => {
   const stackinternalTokens: IStackTokens = { childrenGap: 5 };
 
   function getSelectedQuestion(ID: any)  {
-    alert(ID);
     props.CallbackQuestionNo(ID)
   }
 
@@ -27,12 +26,12 @@ export const QuestionSummary = (props: IQuestionSummaryProps) => {
       <h4>Questions Preview</h4>
       <Stack
         styles={{
-          root: { background: "#e9ecef", paddingBottom: 5, paddingLeft: 5 },
+          root: { background: "#e9ecef", paddingBottom: 5, paddingLeft: 5, width:`30%` },
         }}
       >
-        <Stack horizontal tokens={stackinternalTokens}>
+        <Stack horizontal wrap tokens={stackinternalTokens}>
           {data.map((user: any) => (
-            <Stack.Item shrink grow>
+            <Stack.Item grow={50}>
               <Checkbox
                 label={"Q: " + user.ID}
                 checked={user.Answer ? true : false}
