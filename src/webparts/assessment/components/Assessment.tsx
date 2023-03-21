@@ -17,12 +17,15 @@ import {
 import {
   Checkbox,
   ChoiceGroup,
+  IconButton,
+  IIconProps,
   PrimaryButton,
   Stack,
   StackItem,
   Text,
   TextField,
 } from "office-ui-fabric-react";
+
 import { useState } from "react";
 import ThankYou from "./ThankYou";
 import { QuestionSummary } from "./QuestionSummary";
@@ -36,6 +39,7 @@ const tokens = {
     childrenGap: 5,
   },
 };
+const backIcon: IIconProps = { iconName: "Back" };
 
 const QuestionType = {
   RADIOBUTTON: "Radio Button",
@@ -73,13 +77,13 @@ export default class Assessment extends React.Component<
   }
 
   private secondsToTime(secs: any) {
-    let hours = Math.floor(secs / (60 * 60));
+    const hours = Math.floor(secs / (60 * 60));
 
-    let divisor_for_minutes = secs % (60 * 60);
-    let minutes = Math.floor(divisor_for_minutes / 60);
+    const divisor_for_minutes = secs % (60 * 60);
+    const minutes = Math.floor(divisor_for_minutes / 60);
 
-    let divisor_for_seconds = divisor_for_minutes % 60;
-    let seconds = Math.ceil(divisor_for_seconds);
+    const divisor_for_seconds = divisor_for_minutes % 60;
+    const seconds = Math.ceil(divisor_for_seconds);
 
     let obj = {
       h: hours,
@@ -162,8 +166,8 @@ export default class Assessment extends React.Component<
       await this.getRamdomNo();
       let d = this.state.RandomNoData;
       let selectedAnswer = this.state.questionList;
-      let answerObj: any[] = [];
-      let answer: any[] = selectedAnswer.filter((e) => e.Answer);
+      const answerObj: any[] = [];
+      const answer: any[] = selectedAnswer.filter((e) => e.Answer);
       let userAnswers = "";
       answer.map((e) => {
         userAnswers += "Q" + e.Id + ":" + e.Answer + ",";
@@ -195,7 +199,7 @@ export default class Assessment extends React.Component<
       .getListData(LIST_Answers, COLUMNS_Answers, "QuestionId", null)
       .then((data) => {
         let finalscore = this.state.questionList;
-        console.log("finalscore", finalscore);
+        // console.log("finalscore", finalscore);
         let correctAns: any[] = [];
         correctAns = finalscore.map((d) =>
           data.filter(
@@ -219,7 +223,7 @@ export default class Assessment extends React.Component<
 
   private PreviousClick(activeQuestionIndex: any) {
     if (
-      this.state.questionList[activeQuestionIndex].QuestionType ==
+      this.state.questionList[activeQuestionIndex].QuestionType ===
       QuestionType.RADIOBUTTON
     ) {
       this.setState({
@@ -228,7 +232,7 @@ export default class Assessment extends React.Component<
       });
     }
     if (
-      this.state.questionList[activeQuestionIndex].QuestionType ==
+      this.state.questionList[activeQuestionIndex].QuestionType ===
       QuestionType.CHECKBOX
     ) {
       this.setState({
@@ -237,7 +241,7 @@ export default class Assessment extends React.Component<
       });
     }
     if (
-      this.state.questionList[activeQuestionIndex].QuestionType ==
+      this.state.questionList[activeQuestionIndex].QuestionType ===
       QuestionType.TEXTBOX
     ) {
       this.setState({
@@ -264,7 +268,7 @@ export default class Assessment extends React.Component<
   };
 
   private examStart() {
-    let timeLeftVar = this.secondsToTime(this.state.seconds);
+    const timeLeftVar = this.secondsToTime(this.state.seconds);
     this.setState({ time: timeLeftVar });
     this.startTimer();
 
@@ -293,6 +297,11 @@ export default class Assessment extends React.Component<
       });
   }
 
+  private onBack() {
+    this.saveUserAnswers(this.state.activeQuestionIndexNo);
+    this.setState({checkExamPreviewActive : false})
+  }
+
   // private hideQuestionsPreview() {
   //   this.setState({ questionSummaryData: false });
   // }
@@ -311,11 +320,11 @@ export default class Assessment extends React.Component<
     }
     return (
       <div id="mainDiv" contextMenu="return false">
-        {this.state.summaryInfo == false ? (
+        {this.state.summaryInfo === false ? (
           <Summary isExamStarted={this.handleCallback}></Summary>
         ) : (
           <>
-            {this.state.checkTimeOut == false ? (
+            {this.state.checkTimeOut === false ? (
               <section>
                 <h2>
                   Time left:{" "}
@@ -327,7 +336,7 @@ export default class Assessment extends React.Component<
                     ? "0" + this.state.time.s
                     : this.state.time.s}
                 </h2>
-                {this.state.checkExamPreviewActive == false ? (
+                {this.state.checkExamPreviewActive === false ? (
                   <>
                     <Stack horizontal>
                       <Stack.Item align="end">
@@ -358,7 +367,7 @@ export default class Assessment extends React.Component<
                               .QuestionType === QuestionType.TEXTBOX && (
                               <TextField
                                 value={
-                                  questionList[activeQuestionIndexNo].Answer !=
+                                  questionList[activeQuestionIndexNo].Answer !==
                                   ""
                                     ? this.state.TextBox
                                     : ""
@@ -383,7 +392,7 @@ export default class Assessment extends React.Component<
                                   );
                                 }}
                                 selectedKey={
-                                  questionList[activeQuestionIndexNo].Answer !=
+                                  questionList[activeQuestionIndexNo].Answer !==
                                   ""
                                     ? radioSelected
                                     : false
@@ -457,7 +466,7 @@ export default class Assessment extends React.Component<
                           </Stack>
                           <Stack horizontal>
                             <Stack.Item align="start">
-                              {activeQuestionIndexNo ==
+                              {activeQuestionIndexNo ===
                                 questionList.length - 1 && (
                                 <PrimaryButton
                                   text="Exam Preview"
@@ -465,18 +474,18 @@ export default class Assessment extends React.Component<
                                 />
                               )}
                             </Stack.Item>
-                            <Stack.Item style={{ padding: "0 0 0 50%" }}>
-                              {activeQuestionIndexNo ==
+                            {/* <Stack.Item style={{ padding: "0 0 0 50%" }}>
+                              {activeQuestionIndexNo ===
                                 questionList.length - 1 && (
                                 <PrimaryButton
                                   text="Submit"
                                   onClick={() => this.checkScore()}
                                 />
                               )}
-                            </Stack.Item>
+                            </Stack.Item> */}
                           </Stack>
 
-                          {this.state.questionSummaryData == true && (
+                          {this.state.questionSummaryData === true && (
                             <>
                               <QuestionSummary
                                 CallbackQuestionNo={
@@ -484,29 +493,57 @@ export default class Assessment extends React.Component<
                                 }
                                 userData={this.state.questionList}
                               ></QuestionSummary>
-                              {/* <Stack horizontal>
-                      <Stack.Item>
-                        <PrimaryButton
-                          text="Hide Questions Preview"
-                          onClick={() => this.hideQuestionsPreview()}
-                        />
-                      </Stack.Item>
-                    </Stack> */}
+                              {}
                             </>
                           )}
-                          {/* <>
-            {this.state.checkExamPreviewActive === true}{
-              <CheckExamPreview
-                userData={this.state.questionList}
-              ></CheckExamPreview>
-            }
-            </> */}
                         </>
                       )}
                     </Stack>
                   </>
                 ) : (
-                  <CheckExamPreview userData={this.state.questionList} />
+                  <>
+                    <Stack horizontal>
+                      <Stack.Item align="start">
+                        <IconButton
+                          iconProps={backIcon}
+                          title="Close"
+                          className="iconBtnBack"
+                          styles={{
+                            root: {
+                              selectors: {
+                                ".ms-Button-flexContainer": {
+                                  display: "inline",
+                                },
+                                ".ms-Button-icon": {
+                                  fontSize: "12px",
+                                },
+                              },
+                            },
+                          }}
+                          onClick={(e) => this.onBack()}
+                        />
+                      </Stack.Item>
+                      <Stack.Item align="end">
+                        {activeQuestionIndexNo === questionList.length - 1 && (
+                          <PrimaryButton
+                            text="Submit"
+                            onClick={() => this.checkScore()}
+                          />
+                        )}
+                      </Stack.Item>
+                    </Stack>
+                    <CheckExamPreview userData={this.state.questionList} />
+                    {/* <Stack>
+                      <Stack.Item>
+                        {activeQuestionIndexNo === questionList.length - 1 && (
+                          <PrimaryButton
+                            text="Submit"
+                            onClick={() => this.checkScore()}
+                          />
+                        )}
+                      </Stack.Item>
+                    </Stack> */}
+                  </>
                 )}
               </section>
             ) : (

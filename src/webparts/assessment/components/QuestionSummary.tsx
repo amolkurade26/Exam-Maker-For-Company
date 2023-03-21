@@ -24,14 +24,15 @@ export const QuestionSummary = (props: IQuestionSummaryProps) => {
   return (
     <>
       <h4>Questions Preview</h4>
-      {/* <Stack>
-        <Stack horizontal>
-          <Stack.Item>
-            <Checkbox label="Attempt Questions" defaultChecked />
-            <Checkbox label="Not Attempt Questions" />
-          </Stack.Item>
-        </Stack>
-      </Stack> */}
+      <div>
+        <Checkbox label="Answer you have Attempted" disabled defaultChecked>
+          {" "}
+        </Checkbox><br />
+        <Checkbox label="Answer you have Not-Attempted" disabled>
+          {" "}
+        </Checkbox>
+      </div>
+
       <Stack
         styles={{
           root: {
@@ -47,7 +48,7 @@ export const QuestionSummary = (props: IQuestionSummaryProps) => {
             <Stack.Item grow={50}>
               <Checkbox
                 label={"Q: " + user.ID}
-                checked={user.Answer ? true : false}
+                checked={user.Answer && user.Answer.length > 0  ? true : false}
                 onChange={() => getSelectedQuestion(user.ID)}
               />
             </Stack.Item>
